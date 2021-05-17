@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"bytes"
 	"log"
-	"os"
 )
 
 // Write gzipped data to a Writer
