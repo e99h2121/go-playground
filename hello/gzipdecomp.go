@@ -4,31 +4,40 @@ import (
 	"compress/gzip"
 	"io"
 	"os"
+	"flag"
+	"fmt"
+	"strings"
 )
 
 func main() {
     flag.Parse()
     var name string = flag.Args()[0]
-    
-	dist, err := os.Create("test.txt")
-	if err != nil {
-		panic(err)
-	}
-	defer dist.Close()
+    var txt string = name[:strings.LastIndex(name, ".gz")] 
 
-	src, err := os.Open("test.txt.gz")
+	dist, err := os.Create(txt)
 	if err != nil {
 		panic(err)
 	}
-	defer src.Close()
+
+	src, err := os.Open(name)
+	if err != nil {
+		panic(err)
+	}
 
 	gr, err := gzip.NewReader(src)
 	if err != nil {
 		panic(err)
 	}
-	defer gr.Close()
 
 	if _, err := io.Copy(dist, gr); err != nil {
 		panic(err)
 	}
+
+	dist.Close()
+	src.Close()
+	gr.Close()
+
+    if err := os.Remove(name); err != nil {
+        fmt.Println(err)
+    }
 }
