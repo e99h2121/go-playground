@@ -7,6 +7,9 @@ import (
 )
 
 func main() {
+    flag.Parse()
+    var name string = flag.Args()[0]
+    
 	dist, err := os.Create("test.txt")
 	if err != nil {
 		panic(err)
